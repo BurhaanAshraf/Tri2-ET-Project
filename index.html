@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MasterQuiz - Responsive</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-container">
+      <header>
+        <h1>MasterQuiz</h1>
+        <div id="timer-display" class="hidden">
+          Time: <span id="time-left">00:00</span>
+        </div>
+      </header>
+
+      <section id="home-screen" class="screen active">
+        <h2>Select a Category</h2>
+        <p>Choose a niche to start or create a new one.</p>
+
+        <div id="quiz-grid" class="quiz-grid"></div>
+
+        <div class="menu-buttons">
+          <button id="btn-create-category" class="btn action">
+            ＋ Create Category
+          </button>
+          <div class="row-buttons">
+            <button id="btn-settings" class="btn secondary">Settings</button>
+            <button id="btn-create-menu" class="btn secondary">
+              Add Question
+            </button>
+            <button id="btn-manage" class="btn secondary">Manage</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="settings-screen" class="screen hidden">
+        <h2>Settings</h2>
+        <div class="form-group">
+          <label>Questions per Quiz:</label>
+          <input
+            type="number"
+            id="setting-num-questions"
+            min="1"
+            max="50"
+            value="10"
+          />
+        </div>
+        <div class="form-group">
+          <label>Time per Question (seconds):</label>
+          <input
+            type="number"
+            id="setting-time-per-q"
+            min="10"
+            max="300"
+            value="30"
+          />
+        </div>
+        <div class="action-buttons">
+          <button id="btn-save-settings" class="btn primary">
+            Save & Return
+          </button>
+        </div>
+      </section>
+
+      <section id="create-screen" class="screen hidden">
+        <h2>Add Custom Question</h2>
+        <form id="create-form">
+          <div class="form-group">
+            <label>Select Category:</label>
+            <select id="new-q-target" required></select>
+          </div>
+
+          <div class="form-group">
+            <label>Question:</label>
+            <input
+              type="text"
+              id="new-q-text"
+              placeholder="Enter Question Text"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Options:</label>
+            <input type="text" id="new-opt-1" placeholder="Option 1" required />
+            <input type="text" id="new-opt-2" placeholder="Option 2" required />
+            <input type="text" id="new-opt-3" placeholder="Option 3" required />
+            <input type="text" id="new-opt-4" placeholder="Option 4" required />
+          </div>
+
+          <div class="form-group">
+            <label>Correct Answer:</label>
+            <select id="new-correct-opt" required>
+              <option value="" disabled selected>Select Correct Answer</option>
+              <option value="0">Option 1</option>
+              <option value="1">Option 2</option>
+              <option value="2">Option 3</option>
+              <option value="3">Option 4</option>
+            </select>
+          </div>
+
+          <div class="action-buttons">
+            <button type="submit" class="btn primary">Add Question</button>
+            <button type="button" id="btn-back-home" class="btn secondary">
+              Back
+            </button>
+          </div>
+        </form>
+        <p id="create-msg" class="success-msg"></p>
+      </section>
+
+      <section id="quiz-screen" class="screen hidden">
+        <div class="quiz-meta-bar">
+          <span id="q-category-tag" class="badge">Category</span>
+          <button id="btn-end-early" class="btn-text-danger">End Quiz</button>
+        </div>
+
+        <div class="progress-bar-container">
+          <div id="q-progress-fill" class="progress-fill"></div>
+        </div>
+        <p id="q-progress-text" class="progress-text">1/10</p>
+
+        <div class="question-card">
+          <h3 id="question-text">Loading...</h3>
+          <div id="options-container" class="options-grid"></div>
+        </div>
+
+        <div class="quiz-controls">
+          <button id="btn-prev" class="btn secondary" disabled>Previous</button>
+          <button id="btn-submit-answer" class="btn action">Lock Answer</button>
+          <button id="btn-next" class="btn secondary">Next</button>
+        </div>
+
+        <button id="btn-finish-quiz" class="btn danger hidden">
+          Submit Quiz
+        </button>
+      </section>
+
+      <section id="result-screen" class="screen hidden">
+        <h2>Quiz Report Card</h2>
+        <div class="score-card">
+          <div class="score-circle">
+            <span id="final-score">0</span>
+            <small>Score</small>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-box">Correct: <span id="res-correct">0</span></div>
+            <div class="stat-box">Wrong: <span id="res-wrong">0</span></div>
+            <div class="stat-box">
+              Unsolved: <span id="res-unsolved">0</span>
+            </div>
+          </div>
+        </div>
+        <button id="btn-restart" class="btn primary">Back to Home</button>
+      </section>
+
+      <section id="manage-screen" class="screen hidden">
+        <h2>Manage Questions</h2>
+        <div class="form-group">
+          <label>Filter by Category:</label>
+          <select id="manage-filter"></select>
+        </div>
+        <div id="manage-list" class="question-list"></div>
+        <div class="action-buttons">
+          <button id="btn-back-manage" class="btn secondary">
+            Back to Home
+          </button>
+        </div>
+      </section>
+
+      <div id="alert-modal" class="modal hidden">
+        <div class="modal-content">
+          <h3>Notice</h3>
+          <p id="alert-msg">Message</p>
+          <button id="btn-close-alert" class="btn primary">OK</button>
+        </div>
+      </div>
+
+      <div id="category-modal" class="modal hidden">
+        <div class="modal-content">
+          <h3>New Quiz Category</h3>
+          <input
+            type="text"
+            id="new-cat-name"
+            placeholder="E.g., Sports, Music..."
+            maxlength="15"
+          />
+          <div class="modal-actions">
+            <button id="btn-save-cat" class="btn primary">Create</button>
+            <button id="btn-cancel-cat" class="btn secondary">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="confirm-modal" class="modal hidden">
+        <div class="modal-content">
+          <h3 id="confirm-title">Confirm</h3>
+          <p id="confirm-msg">Are you sure?</p>
+          <div class="modal-actions">
+            <button id="btn-confirm-yes" class="btn danger">Yes</button>
+            <button id="btn-confirm-no" class="btn secondary">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
